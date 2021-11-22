@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/104/trunk/minijava1/src/parlex
+END
+Token.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/15/trunk/minijava1/src/parlex/Token.java
+END
+TokenMgrError.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/15/trunk/minijava1/src/parlex/TokenMgrError.java
+END
+SimpleCharStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/17/trunk/minijava1/src/parlex/SimpleCharStream.java
+END
+ParlexTokenManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/24/trunk/minijava1/src/parlex/ParlexTokenManager.java
+END
+ParlexConstants.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/24/trunk/minijava1/src/parlex/ParlexConstants.java
+END
+ParseException.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/15/trunk/minijava1/src/parlex/ParseException.java
+END
+Parlex.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/128/trunk/minijava1/src/parlex/Parlex.java
+END
+Parlex.jj
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/24/trunk/minijava1/src/parlex/Parlex.jj
+END

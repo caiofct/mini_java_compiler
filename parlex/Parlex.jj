@@ -1,0 +1,276 @@
+/*
+options
+=================================================================
+*/
+options
+{
+    LOOKAHEAD = 2;
+    STATIC = false;
+}
+
+
+/*
+parser
+=================================================================
+*/
+PARSER_BEGIN(Parlex)
+package parlex;
+
+import ansem.visitor.*;
+
+public class Parlex {
+
+  /* Main entry point. */
+  public static void main(String args[]) throws ParseException {
+    Parlex parser = null;
+      if ( args.length == 0 )
+      {
+         parser = new Parlex(System.in);
+      }
+      else
+      {
+         try
+         {
+            parser = new Parlex(new java.io.FileInputStream(args[0]));
+         }
+         catch (java.io.FileNotFoundException e)
+         {
+            System.out.println(e.getMessage());
+            System.out.println("Parlex: erro ao ler arquivo!");
+            e.printStackTrace();
+         }
+      }
+
+      try
+      {
+         Node root = parser.Start();
+         System.out.println("Parlex: parser executado com sucesso!");
+         System.out.println();
+         System.out.println("++Imprimindo somente as variaveis declaradas++");
+         System.out.println();
+
+         final TreeDumper dumper = new TreeDumper();
+         dumper.printSpecials(false);
+         root.accept(new DepthFirstVisitor() {
+            public void visit(VarDecl n) {
+               dumper.startAtNextToken();
+               n.f0.accept(dumper);
+               n.f1.accept(dumper);
+               n.f2.accept(dumper);
+               System.out.println();
+            }
+         });
+
+         System.out.println();
+         System.out.println("++Fim de Imprimindo somente as variaveis declaradas++");
+         System.out.println();
+      }
+      catch (ParseException e)
+      {
+         System.out.println("Parlex: erro de sintaxe!");
+         System.out.println(e.getMessage());
+         e.printStackTrace();
+      }
+  }
+}
+
+PARSER_END(Parlex)
+
+/*
+gramatica
+=================================================================
+*/
+
+/* caracteres ignorados */
+SKIP:
+{
+   <"//"(["a"-"z"] | ["A"-"Z"] | ["0"-"9"] | " ")*> /* comentário de uma linha */
+|  <"/*" (["a"-"z"] | ["A"-"Z"] | ["0"-"9"] | "\n" | "\r" | "\r\n" | " ")* "*/"> /* Comentário multi-linha */
+|   " " /* espaco */
+|   "\t" /* tabulacao */
+|   "\n" /* quebra de linha */
+|   "\r\n" /* retorno de carro com quebra de linha */
+|   "\r"   /* retorno de carro */
+}
+
+/* Caracteres ou expressoes a serem reconhecidos */
+TOKEN:
+{
+   
+    /* Operadores Binários */
+     < BINOP: ( "&&" | "<" | "+" | "-" | "*" ) >
+|    < UNOP: "!" >  
+    /* palavras reservadas */
+|    < INT:      "int" >
+|    < STRING:   "String" >
+|    < BOOLEAN:  "boolean" >
+|    < IF:       "if" >
+|    < ELSE:     "else" >
+|    < WHILE:    "while" >
+|    < THIS:     "this" >
+|    < NEW:      "new" >
+|    < PUBLIC:   "public" >
+|    < STATIC:   "static" >
+|    < VOID:     "void" >
+|    < CLASS:    "class" >
+|    < EXTENDS:  "extends" >
+|    < RETURN:   "return" >
+|    < MAIN:     "main" >
+|    < LENGTH:   "length" >
+|    < SYSTEM:   "System" >
+|    < OUT:      "out" >
+|    < PRINTLN:  "println" >
+    /* caracteres de pontuacao */
+|    < LPAR:     "(" >
+|    < RPAR:     ")" >
+|    < LCOL:     "[" >
+|    < RCOL:     "]" >
+|    < LCHAVE:   "{" >
+|    < RCHAVE:   "}" >
+
+|    < PVIRGULA: ";" >
+|    < VIRGULA:  "," >
+|    < DOT: "." >
+|    < ASSIGN: "=" >
+    /*Digitos númericos, é apenas usado na declaração de outros tokens*/
+|   < #DIGIT: ["0"-"9"] >
+    /* Valores para Booleanos */
+|   < TRUE: "true" >
+|   < FALSE: "false" >
+    /* Identificadores*/
+|   < ID: (["a"-"z"] | ["A"-"Z"]) (["a"-"z"] | ["A"-"Z"] | <DIGIT> | "_")* >
+    /* Valores para Números Inteiros */
+|   < INTEGER_LITERAL: ("-")? (<DIGIT>)+ >
+
+}
+
+/*
+gramatica
+=================================================================
+-> a funcao Program ta' la' no final.. nao sei se o javacc
+permite chamar uma funcao sem ter declarado ela antes..
+
+-> cuidado com os | ! nao esquecer !!
+
+*/
+
+void FormalRest() :
+{}
+{
+    <VIRGULA> Type() <ID>
+}
+
+void FormalList() :
+{}
+{
+    ( Type() <ID> (FormalRest())* )?
+}
+
+void MethodDecl() :
+{}
+{
+    <PUBLIC> Type() <ID> <LPAR> FormalList() <RPAR> <LCHAVE> (VarDecl())* (Statement())* <RETURN> Exp() <PVIRGULA> <RCHAVE>
+}
+
+void Type() :
+{}
+{
+    LOOKAHEAD(2)
+      <INT> <LCOL> <RCOL>
+    | <INT>
+    | LOOKAHEAD(1)
+      <BOOLEAN>
+    | <ID>
+}
+
+void VarDecl() :
+{}
+{
+    Type() <ID> <PVIRGULA>
+}
+
+void ClassDecl() :
+{}
+{
+    LOOKAHEAD(3)
+      <CLASS> <ID> <LCHAVE> (VarDecl())* (MethodDecl())* <RCHAVE>
+    | <CLASS> <ID> <EXTENDS> <ID> <LCHAVE> (VarDecl())* (MethodDecl())* <RCHAVE>
+}
+
+void ExpRest() :
+{}
+{
+    <VIRGULA> Exp()
+}
+
+void ExpList() :
+{}
+{
+    ( Exp() (ExpRest())* )?
+}
+
+/*Adicionadas mais duas regras para a retirada da Recursão à esquerda
+  ExpComRR e ExpSemLR
+*/
+void Exp() :
+{}
+{
+    ExpSemLR() ExpComRR()
+}
+
+/*
+ RR - Right Recursion (Recursao a direita)
+ */
+void ExpComRR() :
+{}
+{
+    (  <BINOP> Exp() ExpComRR()
+    | <LCOL> Exp() <RCOL> ExpComRR()
+    | LOOKAHEAD(2)
+      <DOT> <LENGTH> ExpComRR()
+    | <DOT> <ID> <LPAR> ExpList() <RPAR> ExpComRR() )?
+}
+
+/*
+ LR - Left Recursion (Recursao a esquerda)
+ */
+void ExpSemLR() :
+{}
+{
+    <INTEGER_LITERAL>
+    | <TRUE>
+    | <FALSE>
+    | <ID>
+    | <THIS>
+    | LOOKAHEAD(2)
+      <NEW> <INT> <LCOL> Exp() <RCOL>
+    | <NEW> <ID> <LPAR> <RPAR>
+    | <UNOP> Exp()
+    | <LPAR> Exp() <RPAR>
+}
+
+void Statement() :
+{}
+{
+    <LCHAVE> (Statement())* <RCHAVE>
+    | <IF> <LPAR> Exp() <RPAR> Statement() <ELSE> Statement()
+    | <WHILE> <LPAR> Exp() <RPAR> Statement()
+    | <SYSTEM> <DOT> <OUT> <DOT> <PRINTLN> <LPAR> Exp() <RPAR> <PVIRGULA>
+    | LOOKAHEAD(2)
+      <ID> <ASSIGN> Exp() <PVIRGULA>
+    | <ID> <LCOL> Exp() <RCOL> <ASSIGN> Exp() <PVIRGULA>
+}
+
+void MainClass() :
+{}
+{
+    <CLASS> <ID> <LCHAVE> <PUBLIC> <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LCOL> <RCOL> <ID> <RPAR>
+        <LCHAVE> Statement() <RCHAVE>
+    <RCHAVE>
+}
+
+void Start() :
+{}
+{
+    MainClass() (ClassDecl())* <EOF>
+}

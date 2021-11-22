@@ -1,0 +1,98 @@
+Representação Intermediária
+===========================
+
+TODO Tradução para a linguagem intermediária
+TODO Construção da representação de Stack Frame
+
+Analisador Semântico
+====================
+
+TODO Gerenciamento de Erros da Checagem de Tipos
+TODO Checagem de Tipos
+OK Gerenciamento de Erros da Tabela de Símbolos
+OK Costruir a Tabela de Símbolos
+OK(EXTRA) Retornar os erros específicos para cada token na AST.
+OK(EXTRA) Melhorar a impressão da AST
+OK Árvore de Sintaxe Abstrata(AST)
+
+Parser
+======
+
+OK Program
+OK MainClass
+OK ClassDecl
+OK VarDecl
+OK Type
+OK MethodDecl
+OK FormalList
+OK FormalRest
+OK Statement
+OK Exp
+OK ExpList
+OK ExpRest
+
+Analisador Lexico
+=================
+
+OK todos os tokens!
+
+---------
+* Tokens:
+
+OK int
+OK int []
+OK String
+OK String []
+OK boolean
+OK id
+OK if
+OK else
+OK while
+
+OK {
+OK }
+OK (
+OK )
+OK [
+OK ]
+
+OK SKIPs
+
+OK valores para booleanos
+OK valores para inteiros
+OK valores para reais
+
+OK ARGS
+OK this
+OK new
+OK main
+OK public
+OK static
+OK void
+OK class
+OK extends
+OK return
+OK length
+
+OK ,
+OK ;
+
+OK +
+OK -
+OK *
+OK <
+OK &&
+OK =
+OK .
+OK !
+
+OK System
+OK out
+OK println
+
+=================
+Revisão
+=================
+Operadores binários OK
+Identificadores OK
+Comentarios OK

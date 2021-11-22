@@ -1,0 +1,37 @@
+package ansem.syntaxtree;
+
+import java.util.Hashtable;
+import java.util.Vector;
+
+public class SemanticInfo {
+
+    public static String mainClassName; //nome da classe main
+    public static ClassDecl currentClass = null; //retorna a referência para a classe atual
+    public static MethodDecl currentMethod = null; //retorna a referência para o método atual
+    
+    public static Hashtable<String,ClassDecl> hashClasses = new Hashtable<String, ClassDecl>(); //classes e seus nomes - tabela de simbolos
+    /**
+     * Retorna o numero de variaveis da classe
+     * @param nome_classe
+     * @return
+     */
+    public static int getTotalVariaveisClasse(String nome_classe)
+    {
+        ClassDecl classe = SemanticInfo.hashClasses.get(nome_classe);
+        return classe.getTotalVariaveis();
+    }
+
+    /**
+     * Retorna o nó MethodDecl para um método de uma determinada classe
+     * @param nome_classe Nome da Classe
+     * @param nome_metodo Nome do Método
+     * @return nó MethodDecl
+     */
+    public static MethodDecl getMethodDecl(String nome_classe, String nome_metodo)
+    {
+        ClassDecl cd = hashClasses.get(nome_classe);
+        Hashtable<String, Vector<MethodDecl>> methods = cd.getMethods();
+
+        return methods.get(nome_metodo).elementAt(0);
+    }
+}

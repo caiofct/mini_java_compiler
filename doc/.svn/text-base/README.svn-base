@@ -1,0 +1,29 @@
+O projeto segue a linha de desenvolvimento proposta no livro:
+Modern Compiler Implementation in Java - Second Edition
+
+Assim cada etapa do compilador é dividido em módulos, agrupando lógicas de
+implementação específicas de cada etapa.
+
+Os módulos são:
+
+parlex - pacote contendo analisador sintático e léxico (usa o javacc v. 4.2)
+ansem  - pacote contendo o analisador semántico (usa o jtb v. 1.3.2 e javacc v. 4.2)
+gci    - pacote contendo o gerador de código intermediário
+
+******* INICIO - PACOTE ANSEM *******
+Os arquivos já estão todos gerados para a Árvore de Sintaxe Abstrata, mas se quiser gerar denovo(inclusive o parser),
+siga estes passos:
+=====================================================================================================================
+1 - execute o jtb de dentro do pacote ansem: "java -jar jtb/jtb.jar -p ansem -jd -printer ../parlex/Parlex.jj"
+2 - agora vá para o pacote parlex e execute o javacc: "/javacc/bin/javacc ../ansem/jtb.out.jj"
+3 - Para testar eu acrescentei um novo arquivo no pacote de teste: Exp.mj. Tb acrescentei uns parâmetros para o
+netbeans rodar este arquivo apenas clicando em executar.
+=====================================================================================================================
+
+Para fins se teste, o parser está imprimindo somente as declarações de variáveis, mas fica bem fácil de imprimir qq coisa.
+Basta olhar na documentação do jtb.
+******* FIM - PACOTE ANSEM *******
+
+links:
+http://www.inf.ufes.br/~tavares/labcomp2000/javacc.html
+http://www.inf.ufes.br/~tavares/labcomp2000/javacc/grambig.jj

@@ -1,0 +1,79 @@
+Programa
+=========
+
+Tem que fazer com que as classes geradas não provoquem nenhum erro, uma vez que quando elas são geradas elas saem com uns erros estranhos!
+
+
+Parser
+======
+
+OK Program
+OK MainClass
+OK ClassDecl
+OK VarDecl
+OK Type
+OK MethodDecl
+OK FormalList
+OK FormalRest
+OK Statement
+OK Exp
+OK ExpList
+OK ExpRest
+
+Analisador Lexico
+=================
+
+OK todos os tokens!
+
+---------
+* Tokens:
+
+OK int
+OK int []
+OK String
+OK String []
+OK boolean
+OK id
+OK if
+OK else
+OK while
+
+OK {
+OK }
+OK (
+OK )
+OK [
+OK ]
+
+OK SKIPs
+
+OK valores para booleanos
+OK valores para inteiros
+OK valores para reais
+
+OK this
+OK new
+OK main
+OK public
+OK static
+OK void
+OK class
+OK extends
+OK return
+OK length
+
+OK ,
+OK ;
+
+OK +
+OK -
+OK *
+OK <
+OK &&
+OK =
+OK .
+OK !
+
+OK System
+OK out
+OK println

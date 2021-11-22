@@ -1,0 +1,36 @@
+Analisador Semântico
+====================
+
+* Será que é necessário incluir as ações semânticas no arquivo Parlex.jjt? Pq no livro
+ele explica sobre isso e na seção 4.2 ele diz que essa análise não é interessante. Então
+eu apenas executei o Parlex.jj com o jjtree, e fiz algumas modificações nos arquivos. - Problema Resolvido
+
+Obs: Teste a AST com o arquivo Exp.mj! Fica bem interessante :)
+
+
+Analisador Lexico
+=================
+
+* como fica o "!" ? - Tá certo!
+* o array de inteiros sempre deve ter o seu tamanho ? - What?!?!
+* a definicao do array tá direitinha ? - Agora tá!
+* ta' faltando algum token ? - Acredito que não!
+* no exemplo do livro, acontece algo muito estranho:
+
+TOKEN:
+{
+    <IF: "if">
+}
+
+Program() :
+{}
+{
+    "if" ///PORQUE ?! NUM ERA PRA SER: <IF> ?! - Isso eu não sei explicar não : (
+}
+
+* a funcao Start criada pelo caio ainda precisa ? - Acho que não!
+* como fazer A -> e ?????? - Bota uma ?
+* nas palavras reservadas temos 'String' não seria 'string' ? - String.out.println
+* o token para fim de arquivo não é necessario? EOF?
+* não seria também necessário um token para "System.out.println" ?
+
